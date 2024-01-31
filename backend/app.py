@@ -20,45 +20,49 @@ toolbar = DebugToolbarExtension(app)
 connect_db(app)
 
 ################################################################################
-
+# Listings
 
 @app.get('/listings')
 def get_listings():
     """Makes a request to database for details about all listings
         Takes a query parameter 'search' to search for listings that fit that
         criteria
-        Returns [ {id, name, description, price},... ]
+
+        Returns { "result": [ {id, name, description, price, photos},... ]
     """
     searchParams = request.args.get('search')
+
     if not searchParams:
         listings = Listing.query.all()
     else:
         listings = Listing.query.filter(
             Listing.name.like(f"%{searchParams}%")).all()
-    serializedListings = [item.serialize() for item in listings]
-    return jsonify(serializedListings)
+
+    return jsonify(
+        {
+            "result": [item.serialize() for item in listings]
+        }
+    )
+
 
 @app.get('/listings/<int:listing_id>')
 def get_listing(listing_id):
     """Makes a request to database for details about a certain listing
         Returns
-        {
+        { "result": {
             id,
             name,
             description,
             price,
-            photos:
-            [{
-                id,
-                description,
-                aws_url
-            }]
-        }
+            photos:[{ id, description, source, listing_id },...]
+        } }
     """
     listing = Listing.query.get_or_404(listing_id)
-    return jsonify(listing)
-
-
+    return jsonify(
+        {
+            "result": listing.serialize()
+        }
+    )
 
 @app.post('/listings/new')
 def add_listing():
@@ -69,38 +73,37 @@ def add_listing():
             address,
             description,
             price,
-            photos: [
-                {
-                    source,
-                    description,
-                }
-            ]
+            photos: [{ source,description },...]
         }
-
     Return
-    {
+    { "added": {
+        id,
         name,
         description,
         price,
-        photos: [URL locations]
-    }
+        photos: [{ id, description, source, listing_id },...]
+    } }
     """
 
-    listing = request.json
-    print("received request. Listing:", listing)
+    listing_data = request.json
+    print("received request. Listing:", listing_data)
 
-    Listing.add_listing(
-        name=listing["name"],
-        address=listing["address"],
-        description=listing["description"],
-        price=listing["price"],
-        photos=listing["photos"],
+    listing = Listing.add_listing(
+        name=listing_data["name"],
+        address=listing_data["address"],
+        description=listing_data["description"],
+        price=listing_data["price"],
+        photos=listing_data["photos"],
     )
 
     db.session.commit()
 
     # change to return actual result
-    return jsonify({"result": "added"})
+    return jsonify(
+        {
+            "added": listing.serialize()
+        }
+    )
 
 
 
