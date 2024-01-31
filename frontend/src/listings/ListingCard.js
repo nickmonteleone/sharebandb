@@ -1,3 +1,4 @@
+import "./ListingCard.css";
 import { Link } from "react-router-dom";
 
 /** Show overview info for listing
@@ -11,17 +12,19 @@ import { Link } from "react-router-dom";
  * ListingsPage -> Listing Card
  */
 
-function ListingCard ({ listing }) {
+function ListingCard({ listing }) {
   const { id, name, address, description, price } = listing;
 
   return (
-    <Link className="ListingCard" to={`listings/${id}`}>
-      <h3>{name}</h3>
-      <h4>{address}</h4>
-      <p>{description}</p>
-      <h4>{price}</h4>
-    </Link>
-  )
+    <div className="ListingCard" >
+      <Link className="ListingCard-link" to={`listings/${id}`}>
+        <h3>{name}</h3>
+        <h4>{address}</h4>
+        <p>{description}</p>
+        <h4>{price}</h4>
+      </Link>
+    </div>
+  );
 }
 
-export default ListingCard
+export default ListingCard;

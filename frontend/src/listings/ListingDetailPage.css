@@ -1,0 +1,4 @@
+.ListingDetailPage {
+  display: flex;
+  flex-direction: column;
+}
