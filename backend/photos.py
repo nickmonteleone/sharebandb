@@ -4,17 +4,13 @@ import os
 from dotenv import load_dotenv
 
 import boto3
-# from botocore.exceptions import ClientError
-
-# S3_URI = os.environ['S3_URI']
-TEST_PHOTO_URI = "s3://sharebandb-photos/test-photo.png"
 
 load_dotenv()
 
-# get session for S3
+# Get S3 info and initialize client
 S3_ACCESS_KEY = os.environ['S3_ACCESS_KEY']
 S3_SECRET_ACCESS_KEY = os.environ['S3_SECRET_ACCESS_KEY']
-
+S3_BUCKET = os.environ['S3_BUCKET']
 s3 = boto3.client(
   "s3",
   "us-west-1",
@@ -22,14 +18,16 @@ s3 = boto3.client(
   aws_secret_access_key=S3_SECRET_ACCESS_KEY,
 )
 
+class PhotoStorage:
+    """Photo storage and retrieval from S3."""
 
-test_file = 'test-photo-2.jpg'
+    @staticmethod
+    def upload_photo(file_name):
+        """Upload photo to S3. Input: file_name"""
+        s3.upload_file(
+            file_name,
+            S3_BUCKET,
+            file_name
+        )
 
-bucket = os.environ['S3_BUCKET']
-
-# s3.upload_file(test_file,
-#     bucket,
-#     test_file)
-
-s3.download_file(bucket, test_file, 'test-photo-2.jpg')
-
+PhotoStorage.upload_photo("image (2).png")

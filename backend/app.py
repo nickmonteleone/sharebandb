@@ -41,7 +41,7 @@ def get_listing(listing_id):
             [{
                 id,
                 description,
-                s3_location
+                aws_url
             }]
         }
     """
@@ -56,7 +56,7 @@ def add_listing():
             price,
             photos: [
                 {
-                    file path,
+                    file (base64 encoded image),
                     descriptions
                 }
             ]
@@ -67,6 +67,6 @@ def add_listing():
         name,
         description,
         price,
-        photos: URL location
+        photos: [URL locations]
     }
     """
