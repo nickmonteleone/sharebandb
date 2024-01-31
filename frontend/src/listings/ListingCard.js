@@ -17,7 +17,7 @@ function ListingCard({ listing }) {
 
   return (
     <div className="ListingCard" >
-      <Link className="ListingCard-link" to={`listings/${id}`}>
+      <Link className="ListingCard-link" to={`/listings/${id}`}>
         <h3>{name}</h3>
         <h4>{address}</h4>
         <p>{description}</p>

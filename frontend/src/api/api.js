@@ -47,6 +47,11 @@ class ShareBAndBApi {
     return listingsData.result;
   }
 
+  static async getListing(id){
+    const listingData = await this.request(`listings/${id}`);
+    return listingData.result;
+  }
+
 }
 
 export default ShareBAndBApi;
