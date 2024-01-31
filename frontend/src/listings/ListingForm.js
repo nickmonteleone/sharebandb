@@ -4,7 +4,7 @@ const INITIAL_FORM_DATA = {
   name: "",
   address: "",
   description: "",
-  price: "",
+  price: "0",
 };
 
 /** Form for adding a listing
@@ -72,10 +72,10 @@ function ListingForm({ saveListing, initialFormData = INITIAL_FORM_DATA }) {
         <label className="form-label" htmlFor="description">
           Description:
         </label>
-        <input
+        <textarea
           name="description"
           className="form-control"
-          value={formData.address}
+          value={formData.description}
           onChange={handleChange}
         />
       </div>
@@ -86,7 +86,7 @@ function ListingForm({ saveListing, initialFormData = INITIAL_FORM_DATA }) {
         <input
           name="price"
           className="form-control"
-          value={formData.address}
+          value={formData.price}
           onChange={handleChange}
           type="number"
         />

@@ -7,6 +7,9 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Listing
+from flask_marshmallow import Marshmallow
+from marshmallow import fields
+from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 # from flask import Response
 
@@ -21,7 +24,18 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 toolbar = DebugToolbarExtension(app)
 
+ma = Marshmallow(app)
 connect_db(app)
+
+
+class ListingSchema(SQLAlchemyAutoSchema):
+    class Meta():
+        model = Listing
+        fields = ("name", "address", "description", "price")
+    name = fields.String(required=True)
+    address = fields.String(required=True)
+    description = fields.String(required=True)
+    price = fields.Float(required=True)
 
 ################################################################################
 # Listings
@@ -103,6 +117,9 @@ def add_listing():
     """
 
     listing_data = request.json
+    listing_schema = ListingSchema()
+    errors = listing_schema.validate(listing_data)
+    print("schema errors", errors)
     print("received request. Listing:", listing_data)
 
     listing = Listing.add_listing(
