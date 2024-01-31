@@ -1,5 +1,6 @@
 
 /** Page for showing listing details
+ * Has URL param id
  *
  * Props:
  * - None

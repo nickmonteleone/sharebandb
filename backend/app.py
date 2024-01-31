@@ -8,6 +8,8 @@ from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Listing
 
+# from flask import Response
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -23,6 +25,16 @@ connect_db(app)
 
 ################################################################################
 # Listings
+
+# @app.before_request
+# def basic_authentication():
+#     if request.method.lower() == 'options':
+#         return Response()
+
+# @app.after_request
+# def add_header(response):
+#     response.headers['Access-Control-Allow-Origin'] = '*'
+#     return response
 
 @app.get('/listings')
 def get_listings():

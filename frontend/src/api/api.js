@@ -4,14 +4,14 @@ const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:5000";
 
 class ShareBAndBApi {
 
-  static token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
-    "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
-    "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
+  // static token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ" +
+  //   "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
+  //   "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 
   static async request(endpoint, data = {}, method = "GET") {
     const url = new URL(`${BASE_URL}/${endpoint}`);
     const headers = {
-      authorization: `Bearer ${this.token}`,
+      // authorization: `Bearer ${this.token}`,
       'content-type': 'application/json',
     };
 
@@ -39,11 +39,11 @@ class ShareBAndBApi {
     console.log("getting listings. search: ", search);
 
     if (search) {
-      const filteredListings = await this.request("listings/", { search });
+      const filteredListings = await this.request("listings", { search });
       return filteredListings;
     }
 
-    const listingsData = await this.request("listings/");
+    const listingsData = await this.request("listings");
     return listingsData.result;
   }
 
