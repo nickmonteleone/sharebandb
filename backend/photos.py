@@ -30,4 +30,4 @@ class PhotoStorage:
             file_name
         )
 
-PhotoStorage.upload_photo("image (2).png")
+PhotoStorage.upload_photo("outdoorhouse.jpeg")
