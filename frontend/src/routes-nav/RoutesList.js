@@ -1,5 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import HomePage from "../homepage/HomePage";
+import ListingsPage from "../listings/ListingsPage";
+import AddListingPage from "../listings/AddListingPage";
+import ListingDetailPage from "../listings/ListingDetailPage";
+import NotFound from "../common/NotFound";
 
 /** Routes for sharebandb app.
  *
@@ -13,13 +17,7 @@ import HomePage from "../homepage/HomePage";
  * -> {NotFound, ListingDetailPage, AddListingPage, ListingsPage}
  */
 
-function RoutesList({ login, signup, currentUser }) {
-  console.debug(
-    "Routes",
-    `login=${typeof login}`,
-    `register=${typeof register}`,
-  );
-
+function RoutesList() {
   return (
     <div className="pt-5">
       <Routes>

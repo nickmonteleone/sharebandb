@@ -4,12 +4,14 @@ import os
 from dotenv import load_dotenv
 
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Listing
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_ECHO'] = False
@@ -28,7 +30,8 @@ def get_listings():
         Takes a query parameter 'search' to search for listings that fit that
         criteria
 
-        Returns { "result": [ {id, name, description, price, photos},... ]
+        Returns
+        { "result": [ {id, name, address, description, price, photos},... ]
     """
     searchParams = request.args.get('search')
 
@@ -52,6 +55,7 @@ def get_listing(listing_id):
         { "result": {
             id,
             name,
+            address,
             description,
             price,
             photos:[{ id, description, source, listing_id },...]
@@ -79,6 +83,7 @@ def add_listing():
     { "added": {
         id,
         name,
+        address,
         description,
         price,
         photos: [{ id, description, source, listing_id },...]
