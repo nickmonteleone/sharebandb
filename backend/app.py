@@ -80,7 +80,7 @@ def get_listing(listing_id):
         }
     )
 
-@app.post('/listings/new')
+@app.post('/listings')
 def add_listing():
     """Add a new listing to database
     Input

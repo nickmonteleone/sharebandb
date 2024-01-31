@@ -17,12 +17,15 @@ import NotFound from "../common/NotFound";
  * -> {NotFound, ListingDetailPage, AddListingPage, ListingsPage}
  */
 
-function RoutesList() {
+function RoutesList({ addListing }) {
   return (
     <div className="pt-5">
       <Routes>
         <Route path="/listings/:id" element={<ListingDetailPage />} />
-        <Route path="/listings/new" element={<AddListingPage />} />
+        <Route
+          path="/listings/new"
+          element={<AddListingPage addListing={addListing}/>}
+        />
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="*" element={<NotFound />} />

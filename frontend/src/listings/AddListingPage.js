@@ -1,3 +1,5 @@
+import "./AddListingPage.css"
+import ListingForm from "./ListingForm";
 
 /** Page for adding listing to app
  *
@@ -5,15 +7,16 @@
  * - addListing()
  *
  * States:
- * - None
+ * - formData
  *
- * RoutesList -> AddListingPage -> AddListingForm
+ * RoutesList -> AddListingPage -> ListingForm
  */
 
-function AddListingPage() {
+function AddListingPage({ addListing }) {
   return (
     <div className="AddListingPage">
       AddListingPage
+      <ListingForm saveListing={addListing} />
     </div>
   );
 }

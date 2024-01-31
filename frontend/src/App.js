@@ -15,6 +15,12 @@ import NavBar from './routes-nav/NavBar';
  */
 
 function App() {
+
+  /** Add a listing to app */
+  async function addListing(listingData) {
+    console.log('adding listing', listingData);
+  }
+
   return (
     <div className="App">
       <BrowserRouter>
