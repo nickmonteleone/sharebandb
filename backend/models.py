@@ -74,6 +74,16 @@ class Listing(db.Model):
         db.session.add(listing)
         return listing
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "address": self.address,
+            "description": self.description,
+            "price": self.price,
+            "photos": [photo.serialize() for photo in self.photos]
+        }
+
 class Photo(db.Model):
     """Photo for listing in the system """
 
@@ -104,6 +114,13 @@ class Photo(db.Model):
 
     # listing - via backref relationship in listing
 
+    def serialize(self):
+        return {
+            "id": self.id,
+            "description": self.description,
+            "source": self.source,
+            "listing_id": self.listing_id
+        }
 
 def connect_db(app):
     """Connect this database to provided Flask app.

@@ -25,8 +25,18 @@ connect_db(app)
 @app.get('/listings')
 def get_listings():
     """Makes a request to database for details about all listings
+        Takes a query parameter 'search' to search for listings that fit that
+        criteria
         Returns [ {id, name, description, price},... ]
     """
+    searchParams = request.args.get('search')
+    if not searchParams:
+        listings = Listing.query.all()
+    else:
+        listings = Listing.query.filter(
+            Listing.name.like(f"%{searchParams}%")).all()
+    serializedListings = [item.serialize() for item in listings]
+    return jsonify(serializedListings)
 
 @app.get('/listings/<int:listing_id>')
 def get_listing(listing_id):
@@ -45,6 +55,10 @@ def get_listing(listing_id):
             }]
         }
     """
+    listing = Listing.query.get_or_404(listing_id)
+    return jsonify(listing)
+
+
 
 @app.post('/listings/new')
 def add_listing():
