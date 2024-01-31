@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+DEFAULT_PHOTO_URL = "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
+
 class Listing(db.Model):
     """Property listing in the system """
 
@@ -36,3 +38,79 @@ class Listing(db.Model):
         db.Numeric(10,2),
         nullable=False,
     )
+
+    photos = db.relationship("Photo", backref="listing")
+
+    @classmethod
+    def add_listing(cls, name, address, description, price, photos):
+        """Add a listing to db.
+
+        Input: all data needed for listing
+            - name
+            - address
+            - description
+            - price
+            - photos [{description, source}]
+        Return: added listing
+        """
+
+        photos_for_listing = []
+        for photo in photos:
+            photos_for_listing.append(
+                Photo(
+                    description=photo["description"],
+                    source=photo["source"],
+                )
+            )
+
+        listing = cls(
+            name=name,
+            address=address,
+            description=description,
+            price=price,
+            photos=photos_for_listing,
+        )
+
+        db.session.add(listing)
+        return listing
+
+class Photo(db.Model):
+    """Photo for listing in the system """
+
+    __tablename__ = "photos"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    description = db.Column(
+        db.String(50),
+        nullable=False,
+        default="",
+    )
+
+    source = db.Column(
+        db.String(50),
+        nullable=False,
+        default=DEFAULT_PHOTO_URL,
+    )
+
+    listing_id = db.Column(
+        db.Integer,
+        db.ForeignKey('listings.id', ondelete='CASCADE'),
+        nullable=False,
+    )
+
+    # listing - via backref relationship in listing
+
+
+def connect_db(app):
+    """Connect this database to provided Flask app.
+
+    You should call this in your Flask app.
+    """
+
+    app.app_context().push()
+    db.app = app
+    db.init_app(app)

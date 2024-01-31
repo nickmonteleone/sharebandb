@@ -3,9 +3,9 @@
 import os
 from dotenv import load_dotenv
 
-from flask import Flask
+from flask import Flask, request, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
-from models import connect_db
+from models import db, connect_db, Listing
 
 load_dotenv()
 
@@ -52,12 +52,13 @@ def add_listing():
     Input
         {
             name,
+            address,
             description,
             price,
             photos: [
                 {
-                    file (base64 encoded image),
-                    descriptions
+                    source,
+                    description,
                 }
             ]
         }
@@ -70,3 +71,22 @@ def add_listing():
         photos: [URL locations]
     }
     """
+
+    listing = request.json
+    print("received request. Listing:", listing)
+
+    Listing.add_listing(
+        name=listing["name"],
+        address=listing["address"],
+        description=listing["description"],
+        price=listing["price"],
+        photos=listing["photos"],
+    )
+
+    db.session.commit()
+
+    # change to return actual result
+    return jsonify({"result": "added"})
+
+
+
