@@ -26,7 +26,7 @@ function AddListingPage() {
 
   return (
     <div className="AddListingPage">
-      AddListingPage
+      <h2>Add a listing!</h2>
       <ListingForm saveListing={saveListing} />
     </div>
   );

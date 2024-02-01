@@ -1,3 +1,5 @@
+import "./HomePage.css"
+
 /** HomePage component for initial landing.
  *
  * Props:
@@ -13,7 +15,7 @@ function HomePage() {
   return (
     <div className="HomePage">
       <h1>ShareB&B</h1>
-      <p>Your home away from home!</p>
+      <h3>Your home away from home!</h3>
     </div>
   );
 }

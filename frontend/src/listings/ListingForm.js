@@ -119,7 +119,7 @@ function ListingForm({ saveListing, initialFormData = INITIAL_FORM_DATA }) {
       </div>
       <div className="ListingForm-field">
         <label className="form-label" htmlFor="price">
-          Price:
+          Price ($ per day):
         </label>
         <input
           name="price"

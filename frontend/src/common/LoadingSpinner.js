@@ -12,9 +12,9 @@
 
 function LoadingSpinner() {
   return (
-    <div className="LoadingSpinner">
+    <h1 className="LoadingSpinner">
       Loading ...
-    </div>
+    </h1>
   );
 }
 

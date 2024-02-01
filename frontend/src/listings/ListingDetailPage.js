@@ -61,7 +61,7 @@ function ListingDetailPage() {
       <h1>{listing.name}</h1>
       <h2>{listing.address}</h2>
       <p>{listing.description}</p>
-      <p>{listing.price}</p>
+      <p>${listing.price} per day</p>
       {listing.photos.map(photo =>
         <div key={photo.id}>
           <img

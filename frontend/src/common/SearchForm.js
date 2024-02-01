@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import "./SearchForm.css"
+import { useState } from "react";
 
 function SearchForm({ search }){
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("searchTerm", searchTerm);
 
   /**take inputted search term and pass to
    *  search function to filter listings
@@ -26,12 +26,12 @@ function SearchForm({ search }){
       <form onSubmit={handleSubmit}
         className="SearchForm">
         <input
-          className="SearchFrom-text"
+          className="SearchFrom-text form-control"
           placeholder="Enter search term"
           value={searchTerm}
           onChange={handleChange}>
         </input>
-      <button>Search</button>
+      <button className="btn btn-secondary">Search</button>
       </form>
     </div>
   );

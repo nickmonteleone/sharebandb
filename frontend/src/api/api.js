@@ -53,12 +53,14 @@ class ShareBAndBApi {
   static async getListings(search = "") {
     console.log("getting listings. search: ", search);
 
+    let listingsData;
     if (search) {
-      const filteredListings = await this.request("listings", { search });
-      return filteredListings;
+      listingsData = await this.request("listings", { search });
+    }
+    else {
+      listingsData = await this.request("listings");
     }
 
-    const listingsData = await this.request("listings");
     return listingsData.result;
   }
 

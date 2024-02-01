@@ -21,7 +21,7 @@ function ListingCard({ listing }) {
         <h3>{name}</h3>
         <h4>{address}</h4>
         <p>{description}</p>
-        <h4>{price}</h4>
+        <h4>${price} per day</h4>
       </Link>
     </div>
   );

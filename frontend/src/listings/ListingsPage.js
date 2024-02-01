@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ShareBAndBApi from "../api/api";
 import ListingCard from "./ListingCard";
-// import SearchForm from "./SearchForm";
+import SearchForm from "../common/SearchForm";
 import LoadingSpinner from "../common/LoadingSpinner";
 
 /**Render page showing all available listings for renting
@@ -16,32 +16,33 @@ import LoadingSpinner from "../common/LoadingSpinner";
  */
 
 function ListingsPage() {
-  const [listings, setListings] = useState([]);
+  const [listings, setListings] = useState();
+
+  /** Get listings from api. Optional search criteria. */
+  async function getListings(searchTerm="") {
+    const listingsResults = await ShareBAndBApi.getListings(searchTerm);
+    console.log("listingsResults", listingsResults)
+    setListings(listingsResults);
+  }
 
   useEffect(function fetchAndSetListings() {
-    async function getListings() {
-      const listingsResults = await ShareBAndBApi.getListings();
-
-      setListings(listingsResults);
-    }
+    console.log("Listings page useEffect on first render")
     getListings();
   }, []);
-
-  async function search(searchTerm){
-    const searchedListings = await ShareBAndBApi.getListings(searchTerm);
-    setListings(searchedListings);
-  }
 
   if (!listings) return <LoadingSpinner />;
 
   return (
     <div>
-      {/* <SearchForm search={search}/> */}
-      {listings.map(listing => (
-        <ListingCard
-          key={listing.id}
-          listing={listing} />
-      ))}
+      <SearchForm search={getListings}/>
+      { listings.length === 0
+        ? <h2>No results found!</h2>
+        : listings.map(listing => (
+          <ListingCard
+            key={listing.id}
+            listing={listing} />
+        ))
+      }
     </div>
   );
 }
