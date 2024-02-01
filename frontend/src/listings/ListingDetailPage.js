@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import NotFound from "../common/NotFound";
 import LoadingSpinner from "../common/LoadingSpinner";
 import ShareBAndBApi from "../api/api";
+import AddPhotoForm from "./AddPhotoForm";
 
 /** Page for showing listing details
  * Has URL param id
@@ -45,6 +46,11 @@ function ListingDetailPage() {
   if(error === true) return <NotFound />;
   if (!listing) return <LoadingSpinner/>;
 
+  /** Add photo to a listing.  */
+  async function addPhotoToListing(photoData) {
+    console.log("adding photo", photoData)
+  }
+
   return (
     <div className="ListingDetailPage">
       <h1>{listing.name}</h1>
@@ -56,6 +62,7 @@ function ListingDetailPage() {
           <img src={photo.source} alt={photo.description}></img>
           <p>{photo.description}</p>
         </div>)}
+      <AddPhotoForm addPhoto={addPhotoToListing} />
     </div>
   );
 }

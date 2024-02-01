@@ -28,8 +28,9 @@ class ShareBAndBApi {
 
     if (!resp.ok) {
       console.error("API Error:", resp.statusText, resp.status);
-      const message = (await resp.json()).error.message;
-      throw Array.isArray(message) ? message : [message];
+      const message = (await resp.json()).error;
+      throw message;
+      // throw Array.isArray(message) ? message : [message];
     }
 
     return await resp.json();

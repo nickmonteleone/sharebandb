@@ -134,7 +134,6 @@ def add_listing():
         listing_schema = ListingSchema()
         listing_schema.load(listing_data)
     except ValidationError as error:
-        print("error on Flask side", error.messages)
         return jsonify(
             {"error": error.messages}
         ), 400
