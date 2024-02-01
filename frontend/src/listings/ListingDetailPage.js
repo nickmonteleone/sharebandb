@@ -49,6 +49,7 @@ function ListingDetailPage() {
   /** Add photo to a listing.  */
   async function addPhotoToListing(photoData) {
     console.log("adding photo", photoData)
+
   }
 
   return (

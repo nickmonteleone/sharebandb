@@ -171,7 +171,7 @@ def add_photo(listing_id):
     """
     photo_data = request.json
     photo_file = request.files['file']
-    photo = Photo.add_photo(file=photo_file, description=photo_data["description"])
+    photo = Photo.add_photo(photo_file=photo_file, description=photo_data["description"])
     db.session.commit()
 
 
