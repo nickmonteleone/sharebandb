@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import ShareBAndBApi from "../api/api";
 import ListingCard from "./ListingCard";
+// import SearchForm from "./SearchForm";
 import LoadingSpinner from "../common/LoadingSpinner";
 
 /**Render page showing all available listings for renting
@@ -26,10 +27,16 @@ function ListingsPage() {
     getListings();
   }, []);
 
+  async function search(searchTerm){
+    const searchedListings = await ShareBAndBApi.getListings(searchTerm);
+    setListings(searchedListings);
+  }
+
   if (!listings) return <LoadingSpinner />;
 
   return (
     <div>
+      {/* <SearchForm search={search}/> */}
       {listings.map(listing => (
         <ListingCard
           key={listing.id}

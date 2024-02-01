@@ -43,11 +43,12 @@ class ShareBAndBApi {
       console.error("API Error:", resp.statusText, resp.status);
       const message = (await resp.json()).error;
       throw message;
-      // throw Array.isArray(message) ? message : [message];
     }
 
     return await resp.json();
   }
+
+  /** make request to backend to get list of listings*/
 
   static async getListings(search = "") {
     console.log("getting listings. search: ", search);
@@ -61,17 +62,22 @@ class ShareBAndBApi {
     return listingsData.result;
   }
 
+  /** make request to backend to get the listing specific to the given id*/
+
   static async getListing(id) {
     const listingData = await this.request(`listings/${id}`);
     return listingData.result;
   }
 
-  static async addListing(formData) {
+  /**make request to backend to add a new listing */
 
+  static async addListing(formData) {
     const listingData = await this.request(`listings`, formData, 'POST');
     console.log("listingData", listingData);
     return listingData.added;
   }
+
+  /**make request to backend to add a new photo */
 
   static async addPhoto(formData) {
     console.log("formData", formData);

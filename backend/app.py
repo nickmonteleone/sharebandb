@@ -175,8 +175,8 @@ def add_listing():
     return jsonify(
         {
             "added": listing.serialize()
-        }, 201
-    )
+        }
+    ), 201
 
 @app.post('/listings/<int:listing_id>/photos')
 def add_photo(listing_id):
@@ -218,8 +218,8 @@ def add_photo(listing_id):
     return jsonify(
         {
             "added": photo.serialize()
-        }, 201
-    )
+        }
+    ), 201
 
 
 

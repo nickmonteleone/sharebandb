@@ -20,6 +20,7 @@ function AddListingPage() {
   async function saveListing(listingData) {
     console.log('adding listing', listingData);
     const result = await ShareBAndBApi.addListing(listingData);
+    console.log('result', result);
     navigate(`/listings/${result.id}`);
   }
 
