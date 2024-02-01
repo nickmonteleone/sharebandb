@@ -126,8 +126,9 @@ class Photo(db.Model):
                 - photo instance
         """
         print("models file adding photo", photo_file.filename)
+        upload_file_name = f'Listing-{listing_id}-{photo_file.filename}'
 
-        url = PhotoStorage.upload_photo(photo_file)
+        url = PhotoStorage.upload_photo(photo_file, upload_file_name)
         photo = cls(
             listing_id=listing_id,
             source=url,

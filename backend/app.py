@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Listing, Photo
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, ValidationError
@@ -21,9 +20,7 @@ CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 app.config['SQLALCHEMY_ECHO'] = False
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
-toolbar = DebugToolbarExtension(app)
 
 ma = Marshmallow(app)
 connect_db(app)
@@ -61,7 +58,7 @@ class PhotoSchema(SQLAlchemyAutoSchema):
     """Schema for validating listing inputs"""
     class Meta():
         model = Photo
-        fields = ("description",)
+        fields = ("description", "file")
 
     def _must_not_be_blank(data):
         """Check that input is not blank"""
@@ -70,21 +67,19 @@ class PhotoSchema(SQLAlchemyAutoSchema):
 
     def _photo_validation(file):
         """Validate photo correct type and exists"""
-        if file is None:
-            raise ValidationError('Must include a file')
 
-        elif file.content_type not in {"image/jpeg", "image/png"}:
-            raise ValidationError('Invalid file type')
+        if file.content_type not in ["image/jpeg", "image/png"]:
+            raise ValidationError('Invalid file type. Only jpg/png allowed.')
 
 
     description = fields.String(
         required=True,
         validate=[Length(min=1, max=50), _must_not_be_blank]
     )
-    # source = fields.String(
-    #     required=True,
-    #     validate=[Length(min=1, max=500), _must_not_be_blank]
-    # )
+    file = fields.Raw(
+        required=True,
+        validate=[_photo_validation],
+    )
 
 ################################################################################
 # Listings
@@ -163,6 +158,7 @@ def add_listing():
         listing_schema = ListingSchema()
         listing_schema.load(listing_data)
     except ValidationError as error:
+        print("add listing error:", error.messages)
         return jsonify(
             {"error": error.messages}
         ), 400
@@ -179,7 +175,7 @@ def add_listing():
     return jsonify(
         {
             "added": listing.serialize()
-        }
+        }, 201
     )
 
 @app.post('/listings/<int:listing_id>/photos')
@@ -196,35 +192,33 @@ def add_photo(listing_id):
         }
     }
     """
-    print("received request for adding photo")
-    photo_file = request.files['file']
-    description = request.form["description"]
-
     inputs = {
-        "description": description,
-        "file": photo_file
+        "description": request.form.get("description"),
+        "file":  request.files.get('file')
         }
+    print("received request for adding photo. inputs:", inputs)
+
     # Use listing schema to validate inputs.
     try:
         photo_schema = PhotoSchema()
         photo_schema.load(inputs)
     except ValidationError as error:
+        print("add photo error:", error.messages)
         return jsonify(
             {"error": error.messages}
         ), 400
 
-    print("received add photo request", photo_file, description)
     photo = Photo.add_photo(
         listing_id=listing_id,
-        photo_file=photo_file,
-        description=description,
+        photo_file=inputs["file"],
+        description=inputs["description"],
     )
 
     db.session.commit()
     return jsonify(
         {
             "added": photo.serialize()
-        }
+        }, 201
     )
 
 

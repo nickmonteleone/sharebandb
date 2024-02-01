@@ -23,16 +23,10 @@ class PhotoStorage:
     """Photo storage and retrieval from S3."""
 
     @staticmethod
-    def upload_photo(file):
-        """Upload photo to S3. Input: file_name"""
-
-        # with open(file, "rb") as f:
-        #     print("HERE")
-        #     file_bytes = BytesIO(f.read())
-        #     print("file bytes", file_bytes)
+    def upload_photo(file, file_name):
+        """Upload photo to S3. Input: file and file_name"""
 
         file_bytes = BytesIO(file.read())
-        file_name = file.filename
 
         s3.upload_fileobj(
             file_bytes,

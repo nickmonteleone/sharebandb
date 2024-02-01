@@ -43,8 +43,8 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
     ));
   }
 
-   /** Handle form submission and reset form. */
-   async function handleSubmit(evt) {
+  /** Handle form submission and reset form. */
+  async function handleSubmit(evt) {
     evt.preventDefault();
     // console.log("evt target", evt.target.files[0]);
     console.log("submitted add photo form", formData);
@@ -92,6 +92,18 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
           onChange={handleChangeToFile}
           type="file"
         />
+        <div className="ListingForm-error">
+        {
+          formErrors.file &&
+          <div className="ListingForm-error">
+            {formErrors.file.map((err, idx) =>
+              <li key={idx}>
+                {err}
+              </li>
+            )}
+          </div>
+        }
+        </div>
       </div>
       <div className="d-grid">
         <button className="btn btn-secondary" onClick={handleSubmit}>
