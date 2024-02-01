@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, Listing
+from models import db, connect_db, Listing, Photo
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, ValidationError
 from marshmallow.validate import Length, Range
@@ -154,3 +154,24 @@ def add_listing():
             "added": listing.serialize()
         }
     )
+
+@app.post('listings/<int:listing_id>/photos')
+def add_photo(listing_id):
+    """Add a new listing to database
+    Input
+        {
+            file,
+            description
+        }
+    Return
+    { "added": {
+            id, description, source, listing_id
+        }
+    }
+    """
+    photo_data = request.json
+    photo_file = request.files['file']
+    photo = Photo.add_photo(file=photo_file, description=photo_data["description"])
+    db.session.commit()
+
+

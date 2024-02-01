@@ -29,5 +29,9 @@ class PhotoStorage:
             S3_BUCKET,
             file_name
         )
+        url = f"https://{S3_BUCKET}.s3.amazonaws.com/{file_name}"
+        #https://sharebandbphotos.s3.amazonaws.com/house3.jpg
+        print("url", url)
+        return url
 
-PhotoStorage.upload_photo("outdoorhouse.jpeg")
+PhotoStorage.upload_photo("house3.jpg")

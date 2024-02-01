@@ -1,6 +1,7 @@
 """Database models for sharebandb backend"""
 
 from flask_sqlalchemy import SQLAlchemy
+from photos import PhotoStorage
 
 db = SQLAlchemy()
 
@@ -111,6 +112,10 @@ class Photo(db.Model):
         db.ForeignKey('listings.id', ondelete='CASCADE'),
         nullable=False,
     )
+
+    def add_photo(photo_file, description):
+        url = PhotoStorage.upload_photo(photo_file)
+
 
     # listing - via backref relationship in listing
 

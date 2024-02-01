@@ -62,7 +62,7 @@ function ListingDetailPage() {
           <img src={photo.source} alt={photo.description}></img>
           <p>{photo.description}</p>
         </div>)}
-      <AddPhotoForm addPhoto={addPhotoToListing} />
+      <AddPhotoForm addPhoto={addPhotoToListing} listing_id={id} />
     </div>
   );
 }

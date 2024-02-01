@@ -50,17 +50,6 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
   return (
     <form className="ListingForm" onSubmit={handleSubmit}>
       <div className="ListingForm-field">
-        <label className="form-label" htmlFor="listing_id">
-          Listing id:
-        </label>
-        <input
-          name="listing_id"
-          className="form-control"
-          value={formData.listing_id}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="ListingForm-field">
         <label className="form-label" htmlFor="description">
           Description:
         </label>

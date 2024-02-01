@@ -8,11 +8,13 @@ class ShareBAndBApi {
   //   "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
   //   "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 
-  static async request(endpoint, data = {}, method = "GET") {
+  static async request(endpoint, data = {}, method = "GET", includesFile=false) {
     const url = new URL(`${BASE_URL}/${endpoint}`);
     const headers = {
       // authorization: `Bearer ${this.token}`,
-      'content-type': 'application/json',
+      'content-type': (includesFile === false
+      ? 'application/json'
+      : 'multipart/form-data')
     };
 
     url.search = (method === "GET")
@@ -59,6 +61,13 @@ class ShareBAndBApi {
     console.log("listingData", listingData);
     return listingData.added;
   }
+
+  static async addPhoto(formData){
+    const photoData =
+     await this.request(`listings/${formData.id}/photos`, formData, 'POST', true);
+
+  }
+
 
 }
 
