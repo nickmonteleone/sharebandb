@@ -23,11 +23,10 @@ function ListingDetailPage() {
   const { id } = useParams();
   console.log("ListingDetailPage rendered. id:", id);
 
-
   const [listing, setListing] = useState(null);
   const [error, setError] = useState(false);
 
-  console.log("listing val", listing);
+  console.log("listing data for detail page:", listing);
 
   useEffect(function getListingDetailOnMount() {
     async function getListingDetail() {
@@ -66,7 +65,11 @@ function ListingDetailPage() {
       <p>{listing.price}</p>
       {listing.photos.map(photo =>
         <div key={photo.id}>
-          <img src={photo.source} alt={photo.description}></img>
+          <img
+            src={photo.source}
+            alt={photo.description}
+            className="ListingDetailPage-img"
+          />
           <p>{photo.description}</p>
         </div>)}
       <AddPhotoForm addPhoto={addPhotoToListing} listing_id={id} />
