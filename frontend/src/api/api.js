@@ -52,6 +52,13 @@ class ShareBAndBApi {
     return listingData.result;
   }
 
+  static async addListing(formData){
+
+    const listingData = await this.request(`listings`, formData, 'POST');
+    console.log("listingData", listingData);
+    return listingData.added;
+  }
+
 }
 
 export default ShareBAndBApi;

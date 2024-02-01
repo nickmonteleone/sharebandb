@@ -23,6 +23,7 @@ const INITIAL_FORM_DATA = {
 function ListingForm({ saveListing, initialFormData = INITIAL_FORM_DATA }) {
 
   const [formData, setFormData] = useState(initialFormData);
+  const [formErrors, setFormErrors] = useState([]);
 
   /** Handle change to form, update state. */
   function handleChange(evt) {
@@ -36,12 +37,17 @@ function ListingForm({ saveListing, initialFormData = INITIAL_FORM_DATA }) {
   }
 
   /** Handle form submission and reset form. */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
+    try{
+      await saveListing(formData);
+      setFormData(initialFormData);
+    }
+    catch(err){
+      console.log("we get here!!!!!", err)
+      setFormErrors(err.error);
+    }
 
-    saveListing(formData);
-
-    setFormData(initialFormData);
   }
 
   return (
@@ -97,6 +103,9 @@ function ListingForm({ saveListing, initialFormData = INITIAL_FORM_DATA }) {
         </button>
       </div>
 
+      {formErrors.length > 0 &&
+       formErrors.map(err => <p>{err}</p>)
+      }
 
     </form>
   );
