@@ -28,17 +28,17 @@ function ListingDetailPage() {
 
   console.log("listing data for detail page:", listing);
 
-  useEffect(function getListingDetailOnMount() {
-    async function getListingDetail() {
-      try{
-        const listingResult = await ShareBAndBApi.getListing(id);
-        setListing(listingResult);
-      }
-      catch(errs){
-        setError(true);
-        console.log("Errors:", errs);
-      }
+  async function getListingDetail() {
+    try{
+      const listingResult = await ShareBAndBApi.getListing(id);
+      setListing(listingResult);
     }
+    catch(errs){
+      setError(true);
+      console.log("Errors:", errs);
+    }
+  }
+  useEffect(function getListingDetailOnMount() {
     getListingDetail();
   }, [id]);
 
@@ -53,8 +53,7 @@ function ListingDetailPage() {
     };
     console.log("adding photo", photo)
     await ShareBAndBApi.addPhoto(photo);
-    const listingResult = await ShareBAndBApi.getListing(id);
-    setListing(listingResult);
+    await getListingDetail();
   }
 
   return (

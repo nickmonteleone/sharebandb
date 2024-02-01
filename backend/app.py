@@ -57,6 +57,35 @@ class ListingSchema(SQLAlchemyAutoSchema):
         validate=[Range(min=0)]
     )
 
+class PhotoSchema(SQLAlchemyAutoSchema):
+    """Schema for validating listing inputs"""
+    class Meta():
+        model = Photo
+        fields = ("description",)
+
+    def _must_not_be_blank(data):
+        """Check that input is not blank"""
+        if len(data.strip()) == 0:
+            raise ValidationError("Data not provided.")
+
+    def _photo_validation(file):
+        """Validate photo correct type and exists"""
+        if file is None:
+            raise ValidationError('Must include a file')
+
+        elif file.content_type not in {"image/jpeg", "image/png"}:
+            raise ValidationError('Invalid file type')
+
+
+    description = fields.String(
+        required=True,
+        validate=[Length(min=1, max=50), _must_not_be_blank]
+    )
+    # source = fields.String(
+    #     required=True,
+    #     validate=[Length(min=1, max=500), _must_not_be_blank]
+    # )
+
 ################################################################################
 # Listings
 
@@ -170,6 +199,19 @@ def add_photo(listing_id):
     print("received request for adding photo")
     photo_file = request.files['file']
     description = request.form["description"]
+
+    inputs = {
+        "description": description,
+        "file": photo_file
+        }
+    # Use listing schema to validate inputs.
+    try:
+        photo_schema = PhotoSchema()
+        photo_schema.load(inputs)
+    except ValidationError as error:
+        return jsonify(
+            {"error": error.messages}
+        ), 400
 
     print("received add photo request", photo_file, description)
     photo = Photo.add_photo(

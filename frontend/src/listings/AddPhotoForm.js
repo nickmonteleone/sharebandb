@@ -71,6 +71,16 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
           value={formData.description}
           onChange={handleChangeToNonFileInputs}
         />
+        {
+          formErrors.description &&
+          <div className="ListingForm-error">
+            {formErrors.description.map((err, idx) =>
+              <li key={idx}>
+                {err}
+              </li>
+            )}
+          </div>
+        }
       </div>
       <div className="ListingForm-field">
         <label className="form-label" htmlFor="file">
