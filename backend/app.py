@@ -8,7 +8,8 @@ from flask_cors import CORS
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, Listing
 from flask_marshmallow import Marshmallow
-from marshmallow import fields
+from marshmallow import fields, ValidationError
+from marshmallow.validate import Length, Range
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
 # from flask import Response
@@ -29,26 +30,35 @@ connect_db(app)
 
 
 class ListingSchema(SQLAlchemyAutoSchema):
+    """Schema for validating listing inputs"""
     class Meta():
         model = Listing
-        fields = ("name", "address", "description", "price")
-    name = fields.String(required=True)
-    address = fields.String(required=True)
-    description = fields.String(required=True)
-    price = fields.Float(required=True)
+        fields = ("name", "address", "description", "price", "photos")
+
+    def _must_not_be_blank(data):
+        """Check that input is not blank"""
+        if len(data.strip()) == 0:
+            raise ValidationError("Data not provided.")
+
+    name = fields.String(
+        required=True,
+        validate=[Length(min=1, max=50), _must_not_be_blank]
+    )
+    address = fields.String(
+        required=True,
+        validate=[Length(min=1, max=500), _must_not_be_blank]
+    )
+    description = fields.String(
+        required=True,
+        validate=[Length(min=1, max=2000), _must_not_be_blank]
+    )
+    price = fields.Float(
+        required=True,
+        validate=[Range(min=0)]
+    )
 
 ################################################################################
 # Listings
-
-# @app.before_request
-# def basic_authentication():
-#     if request.method.lower() == 'options':
-#         return Response()
-
-# @app.after_request
-# def add_header(response):
-#     response.headers['Access-Control-Allow-Origin'] = '*'
-#     return response
 
 @app.get('/listings')
 def get_listings():
@@ -94,6 +104,7 @@ def get_listing(listing_id):
         }
     )
 
+
 @app.post('/listings')
 def add_listing():
     """Add a new listing to database
@@ -117,17 +128,22 @@ def add_listing():
     """
 
     listing_data = request.json
-    listing_schema = ListingSchema()
-    errors = listing_schema.validate(listing_data)
-    print("schema errors", errors)
-    print("received request. Listing:", listing_data)
+
+    # Use listing schema to validate inputs.
+    try:
+        listing_schema = ListingSchema()
+        listing_schema.load(listing_data)
+    except ValidationError as error:
+        return jsonify(
+            {"error": error.messages}
+        )
 
     listing = Listing.add_listing(
         name=listing_data["name"],
         address=listing_data["address"],
         description=listing_data["description"],
         price=listing_data["price"],
-        photos=listing_data["photos"],
+        photos=listing_data.get("photos", []),
     )
 
     db.session.commit()
@@ -138,6 +154,3 @@ def add_listing():
             "added": listing.serialize()
         }
     )
-
-
-
