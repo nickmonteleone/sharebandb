@@ -3,7 +3,6 @@ import { useState } from "react";
 const INITIAL_FORM_DATA = {
   file: null,
   description: "",
-  listing_id: "",
 };
 
 /** Form for adding a photo to a listing
@@ -21,8 +20,8 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
   const [formData, setFormData] = useState(initialFormData);
   const [formErrors, setFormErrors] = useState({});
 
-  /** Handle change to form, update state. */
-  function handleChange(evt) {
+  /** Handle change to non file inputs, update state. */
+  function handleChangeToNonFileInputs(evt) {
     const { name, value } = evt.target;
     setFormData(data => (
       {
@@ -32,9 +31,22 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
     ));
   }
 
+  /** Handle change to form, update state. */
+  function handleChangeToFile(evt) {
+    console.log("evt target", evt.target.files[0]);
+    const file = evt.target.files[0];
+    setFormData(data => (
+      {
+        ...data,
+        "file": file,
+      }
+    ));
+  }
+
    /** Handle form submission and reset form. */
    async function handleSubmit(evt) {
     evt.preventDefault();
+    // console.log("evt target", evt.target.files[0]);
     console.log("submitted add photo form", formData);
     try {
       await addPhoto(formData);
@@ -57,7 +69,7 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
           name="description"
           className="form-control"
           value={formData.description}
-          onChange={handleChange}
+          onChange={handleChangeToNonFileInputs}
         />
       </div>
       <div className="ListingForm-field">
@@ -67,8 +79,7 @@ function AddPhotoForm({ addPhoto, initialFormData = INITIAL_FORM_DATA }) {
         <input
           name="file"
           className="form-control"
-          value={formData.file}
-          onChange={handleChange}
+          onChange={handleChangeToFile}
           type="file"
         />
       </div>

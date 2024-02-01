@@ -63,9 +63,10 @@ class ShareBAndBApi {
   }
 
   static async addPhoto(formData){
+    console.log("formData", formData)
     const photoData =
-     await this.request(`listings/${formData.id}/photos`, formData, 'POST', true);
-
+     await this.request(`listings/${formData.listing_id}/photos`, formData, 'POST', true);
+    return photoData.added;
   }
 
 

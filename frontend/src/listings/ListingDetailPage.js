@@ -48,8 +48,14 @@ function ListingDetailPage() {
 
   /** Add photo to a listing.  */
   async function addPhotoToListing(photoData) {
-    console.log("adding photo", photoData)
-
+    const photo = {
+      ...photoData,
+      "listing_id": id
+    };
+    console.log("adding photo", photo)
+    await ShareBAndBApi.addPhoto(photo);
+    const listingResult = await ShareBAndBApi.getListing(id);
+    setListing(listingResult);
   }
 
   return (

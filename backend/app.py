@@ -167,7 +167,8 @@ def add_photo(listing_id):
         }
     }
     """
-
+    print("hellooooooooooooooooooo")
+    print("request.files", request.form["description"])
     photo_file = request.files['file']
     description = request.form["description"]
 
