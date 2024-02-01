@@ -5,11 +5,12 @@ from dotenv import load_dotenv
 
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-from models import db, connect_db, Listing, Photo
+from models import db, connect_db, Listing, Photo, User
 from flask_marshmallow import Marshmallow
 from marshmallow import fields, ValidationError
 from marshmallow.validate import Length, Range
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
+from jwt import encode, decode
 
 # from flask import Response
 
@@ -221,6 +222,18 @@ def add_photo(listing_id):
         }
     ), 201
 
+################################################################################
+# Auth
+@app.post("/login")
+def login():
+    loginInfo = request.json
+    user = User.authenticate(loginInfo["username"], loginInfo["password"])
+    token = encode(user, app.config["SECRET_KEY"], algorithm="HS256")
+    return jsonify(
+        {
+            "token": token
+        }
+    )
 
 
 

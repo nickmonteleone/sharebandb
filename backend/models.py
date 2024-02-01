@@ -1,6 +1,7 @@
 """Database models for sharebandb backend"""
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_bcrypt import bcrypt
 from photos import PhotoStorage
 
 db = SQLAlchemy()
@@ -151,6 +152,54 @@ class Photo(db.Model):
             "listing_id": self.listing_id,
         }
 
+class User(db.Model):
+    """Photo for listing in the system """
+
+    __tablename__ = "users"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    username = db.Column(
+        db.String(50),
+        nullable=False,
+        default="",
+    )
+
+    password = db.Column(
+        db.String(50),
+        nullable=False,
+        default="",
+    )
+
+    listings = db.relationship("Listing", backref="user")
+
+    @classmethod
+    def signup(cls, username, password):
+        """Sign up user"""
+
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(username=username, password=hashed_pwd)
+
+        db.session.add(user)
+        return user
+
+    @classmethod
+    def authenticate(cls, username, password):
+        """Find user with username and password"""
+
+        user = cls.query.filter_by(username=username).one_or_none()
+
+        if user:
+            is_auth = bcrypt.check_password_hash(user.password, password)
+            if is_auth:
+                return user
+                #return token instead?
+
+        return False
 
 def connect_db(app):
     """Connect this database to provided Flask app.
