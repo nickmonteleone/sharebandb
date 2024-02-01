@@ -147,21 +147,19 @@ def add_listing():
     )
 
     db.session.commit()
-
-    # change to return actual result
     return jsonify(
         {
             "added": listing.serialize()
         }
     )
 
-@app.post('listings/<int:listing_id>/photos')
+@app.post('/listings/<int:listing_id>/photos')
 def add_photo(listing_id):
     """Add a new listing to database
     Input
         {
-            file,
-            description
+            file, (image file)
+            description (string)
         }
     Return
     { "added": {
@@ -169,9 +167,24 @@ def add_photo(listing_id):
         }
     }
     """
-    photo_data = request.json
+
     photo_file = request.files['file']
-    photo = Photo.add_photo(photo_file=photo_file, description=photo_data["description"])
+    description = request.form["description"]
+
+    print("received add photo request", photo_file, description)
+    photo = Photo.add_photo(
+        listing_id=listing_id,
+        photo_file=photo_file,
+        description=description,
+    )
+
     db.session.commit()
+    return jsonify(
+        {
+            "added": photo.serialize()
+        }
+    )
+
+
 
 

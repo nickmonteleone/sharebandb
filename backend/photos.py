@@ -1,6 +1,7 @@
 """Handle file retrieval and upload for photos to AWS S3"""
 
 import os
+from io import BytesIO
 from dotenv import load_dotenv
 
 import boto3
@@ -22,16 +23,24 @@ class PhotoStorage:
     """Photo storage and retrieval from S3."""
 
     @staticmethod
-    def upload_photo(file_name):
+    def upload_photo(file):
         """Upload photo to S3. Input: file_name"""
-        s3.upload_file(
-            file_name,
+
+        # with open(file, "rb") as f:
+        #     print("HERE")
+        #     file_bytes = BytesIO(f.read())
+        #     print("file bytes", file_bytes)
+
+        file_bytes = BytesIO(file.read())
+        file_name = file.filename
+
+        s3.upload_fileobj(
+            file_bytes,
             S3_BUCKET,
             file_name
         )
         url = f"https://{S3_BUCKET}.s3.amazonaws.com/{file_name}"
-        #https://sharebandbphotos.s3.amazonaws.com/house3.jpg
-        print("url", url)
+        print("uploaded photo, access url:", url)
         return url
 
-PhotoStorage.upload_photo("house3.jpg")
+# PhotoStorage.upload_photo("house3.jpg")

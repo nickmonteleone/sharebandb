@@ -102,7 +102,7 @@ class Photo(db.Model):
     )
 
     source = db.Column(
-        db.String(50),
+        db.String(500),
         nullable=False,
         default=DEFAULT_PHOTO_URL,
     )
@@ -113,19 +113,43 @@ class Photo(db.Model):
         nullable=False,
     )
 
-    def add_photo(photo_file, description):
-        url = PhotoStorage.upload_photo(photo_file)
-
-
     # listing - via backref relationship in listing
 
+    @classmethod
+    def add_photo(cls, listing_id, photo_file, description):
+        """Add photo to AWS and then database.
+            Inputs:
+                - listing_id (int)
+                - photo_file (file)
+                - description (str)
+            Returns:
+                - photo instance
+        """
+        print("models file adding photo", photo_file.filename)
+
+        url = PhotoStorage.upload_photo(photo_file)
+        photo = cls(
+            listing_id=listing_id,
+            source=url,
+            description=description,
+        )
+
+        db.session.add(photo)
+        print("photo added:", photo)
+
+        return photo
+
     def serialize(self):
+        """Return dict of photo object.
+        { id, source, description, listing_id }
+        """
         return {
             "id": self.id,
-            "description": self.description,
             "source": self.source,
-            "listing_id": self.listing_id
+            "description": self.description,
+            "listing_id": self.listing_id,
         }
+
 
 def connect_db(app):
     """Connect this database to provided Flask app.
