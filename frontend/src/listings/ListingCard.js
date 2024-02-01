@@ -14,14 +14,15 @@ import { Link } from "react-router-dom";
 
 function ListingCard({ listing }) {
   const { id, name, address, description, price } = listing;
+  const formattedPrice =
+  Number(price).toLocaleString("en-US",{ style: 'currency', currency: 'USD' });
 
   return (
     <div className="ListingCard" >
       <Link className="ListingCard-link" to={`/listings/${id}`}>
-        <h3>{name}</h3>
-        <h4>{address}</h4>
-        <p>{description}</p>
-        <h4>${price} per day</h4>
+        <h2>{name}</h2>
+        <h3>{address}</h3>
+        <h4>{formattedPrice} per day</h4>
       </Link>
     </div>
   );
