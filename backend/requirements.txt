@@ -11,6 +11,7 @@ Flask==2.3.3
 Flask-Bcrypt==1.0.1
 Flask-Cors==4.0.0
 Flask-DebugToolbar @ git+https://github.com/pallets-eco/flask-debugtoolbar@9b63ad1837458f14597b87ad266da3d38835071f
+flask-marshmallow==1.1.0
 Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.1
 greenlet==3.0.3
@@ -20,6 +21,8 @@ jedi==0.19.1
 Jinja2==3.1.3
 jmespath==1.0.1
 MarkupSafe==2.1.4
+marshmallow==3.20.2
+marshmallow-sqlalchemy==1.0.0
 matplotlib-inline==0.1.6
 packaging==23.2
 parso==0.8.3
@@ -29,6 +32,7 @@ psycopg2-binary==2.9.9
 ptyprocess==0.7.0
 pure-eval==0.2.2
 Pygments==2.17.2
+PyJWT==2.8.0
 python-dateutil==2.8.2
 python-dotenv==1.0.1
 s3transfer==0.10.0

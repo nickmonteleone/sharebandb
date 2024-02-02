@@ -1,10 +1,11 @@
 """Database models for sharebandb backend"""
 
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import bcrypt
+from flask_bcrypt import Bcrypt
 from photos import PhotoStorage
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
 
 DEFAULT_PHOTO_URL = "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg"
 
@@ -38,6 +39,12 @@ class Listing(db.Model):
 
     price = db.Column(
         db.Numeric(10,2),
+        nullable=False,
+    )
+
+    owner_user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id', ondelete='CASCADE'),
         nullable=False,
     )
 
@@ -169,7 +176,7 @@ class User(db.Model):
     )
 
     password = db.Column(
-        db.String(50),
+        db.String(500),
         nullable=False,
         default="",
     )
@@ -197,7 +204,6 @@ class User(db.Model):
             is_auth = bcrypt.check_password_hash(user.password, password)
             if is_auth:
                 return user
-                #return token instead?
 
         return False
 

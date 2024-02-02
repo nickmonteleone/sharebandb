@@ -228,12 +228,37 @@ def add_photo(listing_id):
 def login():
     loginInfo = request.json
     user = User.authenticate(loginInfo["username"], loginInfo["password"])
-    token = encode(user, app.config["SECRET_KEY"], algorithm="HS256")
+    user_info = {
+        "username": user.username,
+        "id": user.id
+    }
+    print("user_info", user_info)
+    token = encode({'data': user_info}, app.config["SECRET_KEY"], algorithm="HS256")
     return jsonify(
         {
             "token": token
         }
     )
+
+@app.post("/signup")
+def signup():
+    signupInfo = request.json
+
+    user = User.signup(signupInfo["username"], signupInfo["password"])
+    user_info = {
+        "username": user.username,
+        "id": user.id
+    }
+
+    token = encode({'data': user_info}, app.config["SECRET_KEY"], algorithm="HS256")
+
+    db.session.commit()
+
+    return jsonify(
+        {
+            "token": token
+        }
+    ), 201
 
 
 
