@@ -1,6 +1,6 @@
 import "./ListingCard.css";
 import { Link } from "react-router-dom";
-
+import ShareBAndBApi from "../api/api";
 /** Show overview info for listing
  *
  * Props:
@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
  */
 
 function ListingCard({ listing }) {
-  const { id, name, address, description, price } = listing;
+  const { id, name, address, description, price, username} = listing;
   const formattedPrice =
   Number(price).toLocaleString("en-US",{ style: 'currency', currency: 'USD' });
 
@@ -23,6 +23,7 @@ function ListingCard({ listing }) {
         <h2>{name}</h2>
         <h3>{address}</h3>
         <h4>{formattedPrice} per day</h4>
+        <h4>Owned by {username}</h4>
       </Link>
     </div>
   );

@@ -95,6 +95,13 @@ class ShareBAndBApi {
     return photoData.added;
   }
 
+  // /** make request to backend to get the username specific to the given id*/
+
+  // static async getUsername(userId) {
+  //   const userData = await this.request(`user/${userId}`);
+  //   return userData.result;
+  // }
+
   /**login */
 
   static async login(username,password){

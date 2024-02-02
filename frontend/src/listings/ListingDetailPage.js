@@ -56,7 +56,7 @@ function ListingDetailPage() {
     await getListingDetail();
   }
 
-  const { name, address, description, price, photos } = listing;
+  const { name, address, description, price, photos, username } = listing;
   const formattedPrice =
     Number(price).toLocaleString("en-US",{ style: 'currency', currency: 'USD' });
 
@@ -66,6 +66,7 @@ function ListingDetailPage() {
       <h2>{address}</h2>
       <p>{description}</p>
       <p>{formattedPrice} per day</p>
+      <p>Owned by {username}</p>
       {photos.map(photo =>
         <div key={photo.id}>
           <img

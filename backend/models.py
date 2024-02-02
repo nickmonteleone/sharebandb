@@ -91,7 +91,8 @@ class Listing(db.Model):
             "address": self.address,
             "description": self.description,
             "price": self.price,
-            "photos": [photo.serialize() for photo in self.photos]
+            "photos": [photo.serialize() for photo in self.photos],
+            "username": self.user.username
         }
 
 class Photo(db.Model):

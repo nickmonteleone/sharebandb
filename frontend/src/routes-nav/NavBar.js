@@ -21,6 +21,9 @@ function NavBar({ isLoggedIn, logout }) {
       {
         (!isLoggedIn)
           ? <>
+            <NavLink className="NavBar-link" to="/listings">
+              View listings
+            </NavLink>
             <NavLink className="NavBar-link" to="/login">
               Login
             </NavLink>
@@ -32,14 +35,14 @@ function NavBar({ isLoggedIn, logout }) {
             <NavLink className="NavBar-link" to="/listings/new">
               Add a listing
             </NavLink>
+            <NavLink className="NavBar-link" to="/listings">
+              View listings
+            </NavLink>
             <Link className="NavBar-link"  onClick={logout} to="/">
               Logout
             </Link>
           </>
       }
-      <NavLink className="NavBar-link" to="/listings">
-        View listings
-      </NavLink>
     </div>
   );
 }

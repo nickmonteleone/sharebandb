@@ -109,7 +109,7 @@ def get_listings():
         listings = Listing.query.all()
     else:
         listings = Listing.query.filter(
-            Listing.name.like(f"%{searchParams}%")).all()
+            Listing.name.ilike(f"%{searchParams}%")).all()
 
     return jsonify(
         {
@@ -232,6 +232,23 @@ def add_photo(listing_id):
             "added": photo.serialize()
         }
     ), 201
+
+# @app.get('/user/<int:user_id>')
+# def get_user(user_id):
+#     """Makes a request to database for username associated with id
+#         Returns
+#         { "result": {
+#             username
+#         } }
+#     """
+#     user = User.query.get_or_404(user_id)
+#     return jsonify(
+#         {
+#             "result": {
+#                 user.username
+#             }
+#         }
+#     )
 
 ################################################################################
 # Auth
