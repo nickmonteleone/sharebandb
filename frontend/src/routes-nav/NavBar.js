@@ -1,5 +1,5 @@
 import "./NavBar.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 /** NavBar component for navigation
  *
@@ -32,9 +32,9 @@ function NavBar({ isLoggedIn, logout }) {
             <NavLink className="NavBar-link" to="/listings/new">
               Add a listing
             </NavLink>
-            <NavLink className="NavBar-link"  onClick={logout} to="/">
+            <Link className="NavBar-link"  onClick={logout} to="/">
               Logout
-            </NavLink>
+            </Link>
           </>
       }
       <NavLink className="NavBar-link" to="/listings">

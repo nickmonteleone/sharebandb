@@ -72,9 +72,9 @@ function LoginForm({ login }) {
           <li>{formError}</li>
         </div>
       }
-      <div className="d-grid">
+      <div className="d-grid mt-3">
         <button className="btn btn-secondary" onClick={handleSubmit}>
-          Signup
+          Login
         </button>
       </div>
     </form>

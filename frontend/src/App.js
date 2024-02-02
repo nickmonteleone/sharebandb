@@ -37,8 +37,6 @@ function App() {
             // put the token on the Api class so it can use it to call the API.
             ShareBAndBApi.token = token;
             console.log("decoded token", decode(token))
-
-
             setCurrentUser(user);
           } catch (err) {
             console.error("App loadUserInfo: problem loading", err);
