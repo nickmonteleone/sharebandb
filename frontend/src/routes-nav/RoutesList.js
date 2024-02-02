@@ -4,11 +4,13 @@ import ListingsPage from "../listings/ListingsPage";
 import AddListingPage from "../listings/AddListingPage";
 import ListingDetailPage from "../listings/ListingDetailPage";
 import NotFound from "../common/NotFound";
+import SignupForm from "../auth/SignupForm";
+import LoginForm from "../auth/LoginForm";
 
 /** Routes for sharebandb app.
  *
  * Props:
- * - currentUsername
+ * - isLoggedIn (true/false)
  * -login()
  * -signup()
  *
@@ -19,18 +21,30 @@ import NotFound from "../common/NotFound";
  * -> {NotFound, ListingDetailPage, AddListingPage, ListingsPage}
  */
 
-function RoutesList({ currentUsername, login, signup }) {
+function RoutesList({ isLoggedIn, login, signup }) {
+  console.log("routeslist isLoggedIn", isLoggedIn)
   return (
     <div className="pt-5">
       <Routes>
-        <Route path="/listings/:id" element={<ListingDetailPage />} />
-        <Route
-          path="/listings/new"
-          element={<AddListingPage/>}
-        />
-        <Route path="/listings" element={<ListingsPage />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="*" element={<NotFound />} />
+        {
+          (!isLoggedIn)
+            ? <>
+              <Route path="/signup" element={<SignupForm signup={signup} />} />
+              <Route path="/login" element={<LoginForm login={login} />} />
+              <Route path="/listings" element={<ListingsPage />} />
+              <Route path="/listings/:id" element={<ListingDetailPage />} />
+            </>
+            : <>
+              <Route path="/listings/:id" element={<ListingDetailPage />} />
+              <Route
+                path="/listings/new"
+                element={<AddListingPage />}
+              />
+              <Route path="/listings" element={<ListingsPage />} />
+              <Route path="/" element={<HomePage />} />
+              <Route path="*" element={<NotFound />} />
+            </>
+        }
       </Routes>
     </div>
   );

@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 /** NavBar component for navigation
  *
  * Props:
- * - None
+ * - isLoggedIn (true/false)
  *
  * States:
  * - None
@@ -12,15 +12,28 @@ import { NavLink } from "react-router-dom";
  * App -> NavBar
  */
 
-function NavBar() {
+function NavBar({ isLoggedIn }) {
   return (
     <div className="NavBar">
       <NavLink className="NavBar-link" to="/">
         ShareB&B
       </NavLink>
-      <NavLink className="NavBar-link" to="/listings/new">
-        Add a listing
-      </NavLink>
+      {
+        (!isLoggedIn)
+          ? <>
+            <NavLink className="NavBar-link" to="/login">
+              Login
+            </NavLink>
+            <NavLink className="NavBar-link" to="/signup">
+              Signup
+            </NavLink>
+          </>
+          : <>
+            <NavLink className="NavBar-link" to="/listings/new">
+              Add a listing
+            </NavLink>
+          </>
+      }
       <NavLink className="NavBar-link" to="/listings">
         View listings
       </NavLink>
