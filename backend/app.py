@@ -12,8 +12,6 @@ from marshmallow.validate import Length, Range
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from jwt import encode, decode
 
-# from flask import Response
-
 load_dotenv()
 
 app = Flask(__name__)
@@ -55,6 +53,7 @@ class ListingSchema(SQLAlchemyAutoSchema):
         validate=[Range(min=0)]
     )
 
+
 class PhotoSchema(SQLAlchemyAutoSchema):
     """Schema for validating listing inputs"""
     class Meta():
@@ -72,7 +71,6 @@ class PhotoSchema(SQLAlchemyAutoSchema):
         if file.content_type not in ["image/jpeg", "image/png"]:
             raise ValidationError('Invalid file type. Only jpg/png allowed.')
 
-
     description = fields.String(
         required=True,
         validate=[Length(min=1, max=50), _must_not_be_blank]
@@ -84,6 +82,7 @@ class PhotoSchema(SQLAlchemyAutoSchema):
 
 ################################################################################
 # Listings
+
 
 @app.get('/listings')
 def get_listings():
@@ -179,6 +178,7 @@ def add_listing():
         }
     ), 201
 
+
 @app.post('/listings/<int:listing_id>/photos')
 def add_photo(listing_id):
     """Add a new listing to database
@@ -196,7 +196,7 @@ def add_photo(listing_id):
     inputs = {
         "description": request.form.get("description"),
         "file":  request.files.get('file')
-        }
+    }
     print("received request for adding photo. inputs:", inputs)
 
     # Use listing schema to validate inputs.
@@ -224,6 +224,8 @@ def add_photo(listing_id):
 
 ################################################################################
 # Auth
+
+
 @app.post("/login")
 def login():
     loginInfo = request.json
@@ -233,24 +235,37 @@ def login():
         "id": user.id
     }
     print("user_info", user_info)
-    token = encode({'data': user_info}, app.config["SECRET_KEY"], algorithm="HS256")
+    token = encode({'data': user_info},
+                   app.config["SECRET_KEY"], algorithm="HS256")
     return jsonify(
         {
             "token": token
         }
     )
 
+
 @app.post("/signup")
 def signup():
     signupInfo = request.json
 
+    username_check = User.query.filter_by(
+        username=signupInfo["username"]
+    ).one_or_none()
+
+    if username_check is not None:
+        return jsonify(
+            {"error": "Username is unavailable."}
+        ), 400
+
     user = User.signup(signupInfo["username"], signupInfo["password"])
+
     user_info = {
         "username": user.username,
         "id": user.id
     }
 
-    token = encode({'data': user_info}, app.config["SECRET_KEY"], algorithm="HS256")
+    token = encode({'data': user_info},
+                   app.config["SECRET_KEY"], algorithm="HS256")
 
     db.session.commit()
 
@@ -259,6 +274,3 @@ def signup():
             "token": token
         }
     ), 201
-
-
-

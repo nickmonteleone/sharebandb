@@ -172,13 +172,12 @@ class User(db.Model):
     username = db.Column(
         db.String(50),
         nullable=False,
-        default="",
+        unique=True,
     )
 
     password = db.Column(
-        db.String(500),
+        db.String(100),
         nullable=False,
-        default="",
     )
 
     listings = db.relationship("Listing", backref="user")
