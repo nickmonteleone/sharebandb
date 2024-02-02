@@ -29,7 +29,14 @@ class ListingSchema(SQLAlchemyAutoSchema):
     """Schema for validating listing inputs"""
     class Meta():
         model = Listing
-        fields = ("name", "address", "description", "price", "photos")
+        fields = (
+            "name",
+            "address",
+            "description",
+            "price",
+            "photos",
+            "owner_user_id"
+        )
 
     def _must_not_be_blank(data):
         """Check that input is not blank"""
@@ -52,7 +59,10 @@ class ListingSchema(SQLAlchemyAutoSchema):
         required=True,
         validate=[Range(min=0)]
     )
-
+    owner_user_id = fields.Integer(
+        required=True,
+        validate=[Range(min=1)]
+    )
 
 class PhotoSchema(SQLAlchemyAutoSchema):
     """Schema for validating listing inputs"""
@@ -169,6 +179,7 @@ def add_listing():
         description=listing_data["description"],
         price=listing_data["price"],
         photos=listing_data.get("photos", []),
+        owner_user_id=listing_data["owner_user_id"]
     )
 
     db.session.commit()
@@ -267,6 +278,8 @@ def signup():
         "username": user.username,
         "id": user.id
     }
+
+    print("user_info", user_info)
 
     token = encode({'data': user_info},
                    app.config["SECRET_KEY"], algorithm="HS256")

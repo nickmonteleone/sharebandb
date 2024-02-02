@@ -12,7 +12,7 @@ import { NavLink } from "react-router-dom";
  * App -> NavBar
  */
 
-function NavBar({ isLoggedIn }) {
+function NavBar({ isLoggedIn, logout }) {
   return (
     <div className="NavBar">
       <NavLink className="NavBar-link" to="/">
@@ -31,6 +31,9 @@ function NavBar({ isLoggedIn }) {
           : <>
             <NavLink className="NavBar-link" to="/listings/new">
               Add a listing
+            </NavLink>
+            <NavLink className="NavBar-link"  onClick={logout} to="/">
+              Logout
             </NavLink>
           </>
       }

@@ -41,10 +41,10 @@ function RoutesList({ isLoggedIn, login, signup }) {
                 element={<AddListingPage />}
               />
               <Route path="/listings" element={<ListingsPage />} />
-              <Route path="/" element={<HomePage />} />
-              <Route path="*" element={<NotFound />} />
             </>
         }
+        <Route path="/" element={<HomePage />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

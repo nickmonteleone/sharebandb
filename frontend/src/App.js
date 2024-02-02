@@ -7,6 +7,7 @@ import NavBar from './routes-nav/NavBar';
 import { jwtDecode as decode } from "jwt-decode";
 import ShareBAndBApi from './api/api';
 
+import userContext from './common/userContext';
 /** App component for sharebandb frontend
  *
  * Props:
@@ -20,11 +21,11 @@ import ShareBAndBApi from './api/api';
 
 function App() {
 
-  const [currentUsername, setCurrentUsername] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
   const [token, setToken] = useLocalStorage("sharebandb-token");
 
-  const isLoggedIn = (currentUsername !== null)
-  console.log("App loaded, user:", currentUsername, isLoggedIn)
+  const isLoggedIn = (currentUser !== null)
+  console.log("App loaded, user:", currentUser, isLoggedIn)
 
   useEffect(
     function loadUserInfo() {
@@ -32,20 +33,19 @@ function App() {
       async function getCurrentUser() {
         if (token) {
           try {
-            let { username } = decode(token).data;
+            let user = decode(token);
             // put the token on the Api class so it can use it to call the API.
             ShareBAndBApi.token = token;
             console.log("decoded token", decode(token))
-            console.log("decoded username", username)
 
 
-            setCurrentUsername(username);
+            setCurrentUser(user);
           } catch (err) {
             console.error("App loadUserInfo: problem loading", err);
-            setCurrentUsername(null);
+            setCurrentUser(null);
           }
         } else {
-          setCurrentUsername(null);
+          setCurrentUser(null);
         }
       }
       getCurrentUser();
@@ -55,7 +55,7 @@ function App() {
 
   /**logout of site */
   function logout(){
-    setCurrentUsername(null);
+    setCurrentUser(null);
     setToken(null);
   }
 
@@ -78,7 +78,12 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <userContext.Provider
+      value={{
+        currentUser: currentUser,
+      }}
+    >
+      <div className="App">
       <BrowserRouter>
         <NavBar logout={logout} isLoggedIn={isLoggedIn}/>
         <RoutesList
@@ -86,7 +91,8 @@ function App() {
           login={login}
           signup={signup}/>
       </BrowserRouter>
-    </div>
+      </div>
+    </userContext.Provider>
   );
 }
 

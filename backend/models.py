@@ -51,7 +51,7 @@ class Listing(db.Model):
     photos = db.relationship("Photo", backref="listing")
 
     @classmethod
-    def add_listing(cls, name, address, description, price, photos):
+    def add_listing(cls, name, address, description, price, photos, owner_user_id):
         """Add a listing to db.
 
         Input: all data needed for listing
@@ -78,6 +78,7 @@ class Listing(db.Model):
             description=description,
             price=price,
             photos=photos_for_listing,
+            owner_user_id=owner_user_id
         )
 
         db.session.add(listing)
@@ -189,9 +190,9 @@ class User(db.Model):
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         user = User(username=username, password=hashed_pwd)
-
         db.session.add(user)
-        return user
+        user_result = cls.query.filter_by(username=username).one_or_none()
+        return user_result
 
     @classmethod
     def authenticate(cls, username, password):
