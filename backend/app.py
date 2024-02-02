@@ -11,6 +11,7 @@ from marshmallow import fields, ValidationError
 from marshmallow.validate import Length, Range
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 from jwt import encode, decode
+from jwt.exceptions import DecodeError
 
 load_dotenv()
 
@@ -64,6 +65,7 @@ class ListingSchema(SQLAlchemyAutoSchema):
         validate=[Range(min=1)]
     )
 
+
 class PhotoSchema(SQLAlchemyAutoSchema):
     """Schema for validating listing inputs"""
     class Meta():
@@ -93,7 +95,6 @@ class PhotoSchema(SQLAlchemyAutoSchema):
 ################################################################################
 # Listings
 
-
 @app.get('/listings')
 def get_listings():
     """Makes a request to database for details about all listings
@@ -117,7 +118,6 @@ def get_listings():
         }
     )
 
-
 @app.get('/listings/<int:listing_id>')
 def get_listing(listing_id):
     """Makes a request to database for details about a certain listing
@@ -137,7 +137,6 @@ def get_listing(listing_id):
             "result": listing.serialize()
         }
     )
-
 
 @app.post('/listings')
 def add_listing():
@@ -160,6 +159,20 @@ def add_listing():
         photos: [{ id, description, source, listing_id },...]
     } }
     """
+
+    # Check that a valid token is provided
+    token = str(request.headers.get("authorization")).replace("Bearer ", "")
+    try:
+        user_check = decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+    except DecodeError:
+        user_check = None
+
+    if not user_check:
+        return jsonify(
+        {
+            "error": "unauthorized"
+        }
+    ), 401
 
     listing_data = request.json
 
@@ -204,6 +217,22 @@ def add_photo(listing_id):
         }
     }
     """
+
+    # Check that a valid token is provided
+    token = str(request.headers.get("authorization")).replace("Bearer ", "")
+    try:
+        user_check = decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+    except DecodeError:
+        user_check = None
+
+    if not user_check:
+        return jsonify(
+        {
+            "error": "unauthorized"
+        }
+    ), 401
+
+    # Get inputs from multipart form
     inputs = {
         "description": request.form.get("description"),
         "file":  request.files.get('file')
@@ -233,22 +262,20 @@ def add_photo(listing_id):
         }
     ), 201
 
-# @app.get('/user/<int:user_id>')
-# def get_user(user_id):
-#     """Makes a request to database for username associated with id
-#         Returns
-#         { "result": {
-#             username
-#         } }
-#     """
-#     user = User.query.get_or_404(user_id)
-#     return jsonify(
-#         {
-#             "result": {
-#                 user.username
-#             }
-#         }
-#     )
+@app.get('/users/<int:user_id>')
+def get_user(user_id):
+    """Makes a request to database for username associated with id
+        Returns
+        { "result": {
+            username
+        } }
+    """
+    user = User.query.get_or_404(user_id)
+    return jsonify(
+        {
+            "result": user.username
+        }
+    )
 
 ################################################################################
 # Auth

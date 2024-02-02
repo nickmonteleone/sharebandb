@@ -14,7 +14,7 @@ class ShareBAndBApi {
     console.log("making request");
     const url = new URL(`${BASE_URL}/${endpoint}`);
     const headers = {
-      // authorization: `Bearer ${this.token}`,
+      authorization: `Bearer ${this.token}`,
     };
     // Do not include content-type if multipart form
     if (!includesFile) {

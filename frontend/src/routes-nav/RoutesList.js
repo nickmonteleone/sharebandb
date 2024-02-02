@@ -31,15 +31,10 @@ function RoutesList({ isLoggedIn, login, signup }) {
             ? <>
               <Route path="/signup" element={<SignupForm signup={signup} />} />
               <Route path="/login" element={<LoginForm login={login} />} />
-              <Route path="/listings" element={<ListingsPage />} />
-              <Route path="/listings/:id" element={<ListingDetailPage />} />
             </>
             : <>
               <Route path="/listings/:id" element={<ListingDetailPage />} />
-              <Route
-                path="/add"
-                element={<AddListingPage />}
-              />
+              <Route path="/add" element={<AddListingPage />} />
               <Route path="/listings" element={<ListingsPage />} />
             </>
         }

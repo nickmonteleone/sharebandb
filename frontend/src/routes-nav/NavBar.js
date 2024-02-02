@@ -21,9 +21,6 @@ function NavBar({ isLoggedIn, logout }) {
       {
         (!isLoggedIn)
           ? <>
-            <NavLink className="NavBar-link" to="/listings">
-              View listings
-            </NavLink>
             <NavLink className="NavBar-link" to="/login">
               Login
             </NavLink>
