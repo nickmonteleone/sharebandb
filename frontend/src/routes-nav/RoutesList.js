@@ -8,7 +8,9 @@ import NotFound from "../common/NotFound";
 /** Routes for sharebandb app.
  *
  * Props:
- * - addListing()
+ * - currentUsername
+ * -login()
+ * -signup()
  *
  * States:
  * - None
@@ -17,14 +19,14 @@ import NotFound from "../common/NotFound";
  * -> {NotFound, ListingDetailPage, AddListingPage, ListingsPage}
  */
 
-function RoutesList({ addListing }) {
+function RoutesList({ currentUsername, login, signup }) {
   return (
     <div className="pt-5">
       <Routes>
         <Route path="/listings/:id" element={<ListingDetailPage />} />
         <Route
           path="/listings/new"
-          element={<AddListingPage addListing={addListing}/>}
+          element={<AddListingPage/>}
         />
         <Route path="/listings" element={<ListingsPage />} />
         <Route path="/" element={<HomePage />} />

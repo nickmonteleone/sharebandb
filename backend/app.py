@@ -230,6 +230,10 @@ def add_photo(listing_id):
 def login():
     loginInfo = request.json
     user = User.authenticate(loginInfo["username"], loginInfo["password"])
+    if not user:
+        return jsonify(
+            {"error": "Cannot login with these credentials"}
+        ), 401
     user_info = {
         "username": user.username,
         "id": user.id

@@ -8,6 +8,8 @@ class ShareBAndBApi {
   //   "SI6InRlc3R1c2VyIiwiaXNBZG1pbiI6ZmFsc2UsImlhdCI6MTU5ODE1OTI1OX0." +
   //   "FtrMwBQwe6Ue-glIFgz_Nf8XxRT2YecFCiSpYL0fCXc";
 
+  static token;
+
   static async request(endpoint, data = {}, method = "GET", includesFile = false) {
     console.log("making request");
     const url = new URL(`${BASE_URL}/${endpoint}`);
@@ -91,6 +93,28 @@ class ShareBAndBApi {
       true
     );
     return photoData.added;
+  }
+
+  /**login */
+
+  static async login(username,password){
+    const { token } = await this.request(
+      "login",
+      {username, password},
+      "POST"
+    );
+    return token;
+  }
+
+  /**signup */
+
+  static async signup(username,password){
+    const { token } = await this.request(
+      "signup",
+      {username, password},
+      "POST"
+    );
+    return token;
   }
 
 
