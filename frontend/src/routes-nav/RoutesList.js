@@ -37,7 +37,7 @@ function RoutesList({ isLoggedIn, login, signup }) {
             : <>
               <Route path="/listings/:id" element={<ListingDetailPage />} />
               <Route
-                path="/listings/new"
+                path="/add"
                 element={<AddListingPage />}
               />
               <Route path="/listings" element={<ListingsPage />} />
